@@ -1,12 +1,12 @@
 const mongoose = require("mongoose")
 
 const courseSchema = new mongoose.Schema({
-    courseNmae:{
+    courseName:{
         type:String,
         trim:true,
         required:true
     },
-    courseDescriptiopn:{
+    courseDescription:{
         type:String,
         trim:true,
         required:true
@@ -38,9 +38,12 @@ const courseSchema = new mongoose.Schema({
     thumbnail:{
         type:String,
     },
-    tag:{
+    category:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Tag"
+        ref:"Category"
+    },
+    tag:{
+        type:String,
     },
     studentEnrolled:[
         {
