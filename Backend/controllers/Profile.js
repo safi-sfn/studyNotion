@@ -42,3 +42,60 @@ exports.updateProfile = async (req,res) => {
         })
     }
 }
+
+
+//deleteAccount
+//how can we schedule this deletion operation  -find:cron job
+exports.deleteAccount = async (req,res) => {
+    try {
+        //get id
+        const id = req.user.id
+        //validation
+        const userDetails = await User.findById(id)
+        if(!userDetails){
+            return res.status(200).json({
+                success:false,
+                message:"user not found"
+            })
+        }
+        //delete profile
+        await  Profile.findByIdAndDelete({_id:userDetails.additionalDetails})
+        //TODO: unenroll user from all enrolled courses
+        //delete user
+        await User.findByIdAndDelete({_id:id})
+        //return respone
+        return res(200).json({
+            success:true,
+            message:"Account deleted successfully"
+
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            error:error.message,
+            message:"Internal server error"
+        })
+    }
+}
+
+
+
+exports.getAllUserDetails = async (req,res) => {
+    try {
+        //get id
+        const id = req.user.id
+        //get user details and validation
+        const userDetails = await User.findById(id).populate("additionalDetails").exec()
+        //return response
+        return res.status(200).json({
+            success:false,
+            message:"User data fetch successfully"
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
