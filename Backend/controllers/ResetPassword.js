@@ -13,12 +13,12 @@ exports.resetPasswordToken = async (req,res) => {
      if(!user){
          return res.status(401).json({
              success:false,
-             message:"email is not Registered"
+             message: `This Email: ${email} is not Registered With Us Enter a Valid Email `,
          })
      }
  
      //token generate
-     const token = crypto.randomUUID()
+     const token = crypto.randomBytes(20).toString("hex")
  
      //update user by adding token and expiration time
      const updatedDetails = await User.findOneAndUpdate(
@@ -28,7 +28,7 @@ exports.resetPasswordToken = async (req,res) => {
                                  resetpasswordExpire:Date.now() + 5*60*1000
                              },
                              {new:true})
-     
+     console.log("DETAILS",updatedDetails)
      //create url
      const url = `http://localhost:3000/update-password/${token}`
  
@@ -86,18 +86,18 @@ exports.resetPassword = async(rea,res) =>{
         }
 
         //hash pwd
-        const hashedPassword = await bcrypt.hash(password,10)
+        const encryptedPassword = await bcrypt.hash(password,10)
 
         //password Update
         await User.findOneAndUpdate(
             {token:token},
-            {password:hashedPassword},
+            {password:encryptedPassword},
             {new:true}
         )
         //return response
         return res.status(200).json({
             success:true,
-            message:"Password updated successfully"
+            message:"Password Reset successfully"
         })
     } catch (error) {
         console.log(error)

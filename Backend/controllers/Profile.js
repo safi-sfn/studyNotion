@@ -48,12 +48,17 @@ exports.updateProfile = async (req,res) => {
 //how can we schedule this deletion operation  -find:cron job
 exports.deleteAccount = async (req,res) => {
     try {
+        //TODO : find more on job Schedule
+        // const job = schedule.scheduleJob("10 * * * * *",function(){
+       // console.log("The answer to life, the universe, and everything") })
+        //console.log(job)
+
         //get id
         const id = req.user.id
         //validation
-        const userDetails = await User.findById(id)
+        const userDetails = await User.findById({_id:id})
         if(!userDetails){
-            return res.status(200).json({
+            return res.status(404).json({
                 success:false,
                 message:"user not found"
             })
@@ -90,7 +95,8 @@ exports.getAllUserDetails = async (req,res) => {
         //return response
         return res.status(200).json({
             success:false,
-            message:"User data fetch successfully"
+            message:"User data fetch successfully",
+            data:userDetails
         })
     } catch (error) {
         return res.status(500).json({

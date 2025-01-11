@@ -38,8 +38,6 @@ exports.createCategory = async (req,res) => {
 }
 
 
-// getAllCategory handler Function
-
 exports.showAllCategory = async (req,res) => {
     try {
         
@@ -47,7 +45,7 @@ exports.showAllCategory = async (req,res) => {
         return res.status(200).json({
             success:true,
             message:"All category return successfully",
-            allCategory
+            data:allCategory
         })
     } catch (error) {
         return res.status(500).json({
@@ -57,3 +55,64 @@ exports.showAllCategory = async (req,res) => {
     }
 }
 
+// Category page Details
+
+exports.categoryPageDetails = async (req,res) => {
+    try {
+        const {categoryId} = req.body
+        // Get courses for the specified category
+        const selectedCategory = await Category.findById(categoryId)
+                .populate("courses")
+                .exec()
+        console.log(selectedCategory)
+
+        // Handle the case when the category is not found
+        if(!selectedCategory){
+            console.log("Category not found")
+            return res.status(404).json({
+                success:false,
+                message:"Category not found"
+            })
+        }
+
+        // Handle the Case when there are no courses
+        if(selectedCategory.courses.length === 0){
+            return res.status(404).json({
+                success:false,
+                message:"No courses found for the selected category"
+            })
+        } 
+
+        const selectedCourses = selectedCategory.courses
+
+        // get courses for other categories
+        const categoriesExceptSelected = await Category.find({
+            _id:{$ne:categoryId}
+        }).populate("courses")
+        let differentCourses = []
+        for(const category of categoriesExceptSelected){
+            differentCourses.push(...category.courses)
+        }
+
+        // Get top-selling courses across all categories
+        const allCategories = await Category.find().populate("courses")
+        const allCourses = allCategories.flatMap((category) => category.courses)
+        const mostSellingCourses = allCourses.sort((a,b)=>b.sold - a.sold).slice(0,10)
+
+        //return rseponse
+        return res.status(200).json({
+            success:true,
+            message:"Category page details fetched successfully",
+            selectedCourses:selectedCourses,
+            differentCourses:differentCourses,
+            mostSellingCourses:mostSellingCourses
+
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server Error"
+
+        })
+    }
+}

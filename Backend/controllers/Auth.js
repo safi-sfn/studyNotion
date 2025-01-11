@@ -4,7 +4,8 @@ const otpGenerator = require("otp-generator")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const mailSender = require("../utils/mailSender")
-
+const {passwordUpdated} = require("../mail/templetes/passwordUpdate")
+const Profile = require("../models/Profile")
 require("dotenv").config()
 
 // send OTP for Email Verification

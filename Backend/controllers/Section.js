@@ -28,7 +28,14 @@ exports.createSection = async (req,res) =>{
                                             }
                                         },
                                         {new:true}
-        ) 
+                                   )
+                                   .populate({
+                                    path:"courseContent",
+                                    populate:{
+                                        path:"subSection"
+                                    }
+                                   }) 
+                                   .exec()
         //HW:use populate to replace Section/sub-section both in the updatedCourseDetails
         //return response
         return res.status(200).json({
@@ -45,7 +52,6 @@ exports.createSection = async (req,res) =>{
         })
     }
 }
-
 
 
 //update Section handler
@@ -69,8 +75,8 @@ exports.updateSection = async (req,res) => {
         //return res
         return res.status(200).json({
             success:true,
-            message:"Section updated successfully"
-            
+            message:"Section updated successfully",
+            data: sectionUpdate
         })
         
     } catch (error) {
