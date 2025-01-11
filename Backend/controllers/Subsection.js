@@ -39,13 +39,13 @@ exports.createSubSection = async (req,res) => {
                                     subSection:subSectionDetails._id
                                 }},
                                 {new:true}
-        )
+                     ).populate("subSection")
         //TODO: log updated section here, after adding populate query
         //return respnse 
         return res.status(200).json({
             sucess:true,
             message:"Sub section created successfully",
-            updatedSection
+            data: updatedSection
         })
     } catch (error) {
         return res.status(500).json({

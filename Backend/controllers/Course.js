@@ -7,23 +7,36 @@ require("dotenv").config()
 //create Course Handler function
 exports.createCourse = async (req,res) => {
     try {
+        const userId = req.user.id
         //Data fetch
-        const {courseName, courseDescription, whatYouWillLearn, price, category} = req.body
+        const {
+            courseName, 
+            courseDescription, 
+            whatYouWillLearn, 
+            price, 
+            category,
+            tag,
+            status,
+            instructions,
+            } = req.body
 
         //get thumbnail
         const thumbnail = req.files.thumbnailImage
         
         //validation
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price ||!category ||!thumbnail){
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag ||!category ||!thumbnail){
             return res.status(400).json({
                 success:false,
                 message:"All Fields are required"
             })
         }
 
+        if(!status || status === undefined){
+            status = "Draft"
+        }
+
         //check for Instructor
-        const userId = req.user.id
-        const instructorDetails = await User.findById(userId)
+        const instructorDetails = await User.findById(userId, {accountType:"Instructor"})
         console.log("Instructor Details",instructorDetails)
 
         if(!instructorDetails){
@@ -52,8 +65,11 @@ exports.createCourse = async (req,res) => {
             instructor:instructorDetails._id,
             whatYouWillLearn:whatYouWillLearn,
             price,
+            tag:tag,
             category:categoryDetails._id,
-            thumbnail:thumbnailImage.secure_url
+            thumbnail:thumbnailImage.secure_url,
+            status:status,
+            instructions:instructions
         })
 
         //add the new course to the user schema of Instructor
@@ -61,11 +77,22 @@ exports.createCourse = async (req,res) => {
             {_id:instructorDetails._id},
             {
                 $push:{
-                    courses:newCourse._id
+                    course:newCourse._id
                 }
             },
             {new:true}
         )
+
+        // Add the new course to the Categories
+		await Category.findByIdAndUpdate(
+			{ _id: category },
+			{
+				$push: {
+					course: newCourse._id,
+				},
+			},
+			{ new: true }
+		);
 
         return res.status(200).json({
             success:true,
