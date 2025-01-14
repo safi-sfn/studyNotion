@@ -30,7 +30,7 @@ exports.capturepayments = async (req,res) => {
     }
     // user already pay for the same course
     const uid = new mongoose.Types.ObjectId(userId)
-    if(course.studentsEnrolled.includes(uid)){
+    if(course.studentEnrolled.includes(uid)){
         return res.status(200).json({
             success:true,
             message:"You already enrolled for this course"
@@ -51,7 +51,7 @@ exports.capturepayments = async (req,res) => {
     currency,
     receipt: Math.random(Date.now()).toString(),
     notes:{
-        "course_id":course_id,
+        courseId:course_id,
         userId
     }
   }
@@ -124,14 +124,14 @@ exports.verifySignature = async (req,res) => {
             //mail send krdo confirmation wala 
             const emailResponse = await mailSender(
                                     enrolledStudent.email,
-                                    "Congratulations from CodeHelp",
+                                    "Congratulations from StudyNotion",
                                     "Congratulations, you are onboarded into new CodeHelp Course",
             );
 
             console.log(emailResponse);
             return res.status(200).json({
                 success:true,
-                message:"Signature Verified and COurse Added",
+                message:"Signature Verified and Course Added",
             });
 
 
