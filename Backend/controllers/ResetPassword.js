@@ -54,7 +54,7 @@ exports.resetPasswordToken = async (req,res) => {
 
 
 //resetPassword
-exports.resetPassword = async(rea,res) =>{
+exports.resetPassword = async(req,res) =>{
     try {
         //Data fetch
         const {password,confirmPassword,token} = req.body
