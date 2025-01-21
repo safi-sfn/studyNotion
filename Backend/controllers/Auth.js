@@ -9,7 +9,7 @@ const Profile = require("../models/Profile")
 require("dotenv").config()
 
 // send OTP for Email Verification
-const sendOTP = async (req,res) => {
+exports.sendOTP = async (req,res) => {
         try {
             // fetch email from request body
             const {email} = req.body
