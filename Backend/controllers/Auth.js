@@ -49,7 +49,7 @@ exports.sendOTP = async (req,res) => {
             
             //create an entry in DB fro OTP
             const otpBody = await OTP.create(otpPayload)
-            console.log(otpBody)
+            console.log("OTP Body",otpBody)
             res.status(200).json({
                 success:true,
                 message:"OTP send Successfully",
@@ -57,14 +57,13 @@ exports.sendOTP = async (req,res) => {
             })
 
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
             res.status(500).json({
-                success:flase,
-                message:error.message
+                success:false,
+                error:error.message
             })            
         }
 }
-
 
 
 // Signup Controller for Registering USers
