@@ -20,7 +20,7 @@ exports.createCategory = async (req,res) => {
             name:name,
             description:description
         })
-        consolr.log(categoryDetails)
+        console.log(categoryDetails)
 
         //return response
         return res.status(200).json({
@@ -30,6 +30,7 @@ exports.createCategory = async (req,res) => {
 
 
     } catch (error) {
+        console.log("Backend/controllers/Categories.js",error)
         return res.status(500).json({
             success:false,
             message:error.message
