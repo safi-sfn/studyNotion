@@ -79,14 +79,16 @@ exports.isInstructor = async (req,res,next) =>{
 //isAdmin
 exports.isAdmin = async (req,res,next) =>{
     try {
+        console.log("printing account type:",req.user.accountType)
         if(req.user.accountType !== "Admin"){
             return res.status(401).json({
                 success:false,
                 message:"This is for Admin"
             })
         }
+        next()
     } catch (error) {
-        console.log(error)
+        console.log("Backend/middleware/auth.js====>",error)
         return res.status(500).json({
             success:false,
             message:"Something Went wrong"
