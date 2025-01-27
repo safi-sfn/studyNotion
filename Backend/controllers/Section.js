@@ -45,7 +45,8 @@ exports.createSection = async (req,res) =>{
         })
 
     } catch (error) {
-        return res.staus(500).json({
+        console.log("Backend/controllers/Section.js===>",error)
+        return res.status(500).json({
             success:false,
             message:"Unable to create Section",
             error:error.message
