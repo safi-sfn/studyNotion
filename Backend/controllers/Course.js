@@ -1,7 +1,7 @@
 const Course = require("../models/Course")
 const Category = require("../models/Category")
 const User = require("../models/User")
-const uploadImageToCloudinary = require("../utils/imageUploader")
+const {uploadImageToCloudinary} = require("../utils/imageUploader")
 require("dotenv").config()
 
 //create Course Handler function
@@ -9,7 +9,7 @@ exports.createCourse = async (req,res) => {
     try {
         const userId = req.user.id
         //Data fetch
-        const {
+        let {
             courseName, 
             courseDescription, 
             whatYouWillLearn, 
