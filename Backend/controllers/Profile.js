@@ -27,12 +27,13 @@ exports.updateProfile = async (req,res) => {
         profileDetails.about = about
         profileDetails.contactNumber = contactNumber
         profileDetails.gender = gender
+       
         await profileDetails.save()
 
         //return response
         return res.status(200).json({
             success:true,
-            message:"Profile updated successfully".
+            message:"Profile updated successfully",
             profileDetails
         })
     } catch(error){
@@ -70,13 +71,14 @@ exports.deleteAccount = async (req,res) => {
         //delete user
         await User.findByIdAndDelete({_id:id})
         //return respone
-        return res(200).json({
+        return res.status(200).json({
             success:true,
             message:"Account deleted successfully"
 
         })
 
     } catch (error) {
+        console.log("Backend/controllers/Profile.js",error)
         return res.status(500).json({
             success:false,
             error:error.message,
@@ -95,7 +97,7 @@ exports.getAllUserDetails = async (req,res) => {
         const userDetails = await User.findById(id).populate("additionalDetails").exec()
         //return response
         return res.status(200).json({
-            success:false,
+            success:true,
             message:"User data fetch successfully",
             data:userDetails
         })

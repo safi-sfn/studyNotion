@@ -12,11 +12,11 @@ const {
 // ************************************************************************************
 //                         Profile Routes
 // ************************************************************************************
-// Delete User Account
-router.delete("/updateProfile",auth, updateProfile)
-router.delete("/deleteProfile", deleteAccount)
-router.delete("/getAllUserDetails",auth, getAllUserDetails)
-router.delete("/updateDisplayPicture",auth, updateDisplayPicture)
-router.delete("/getEnrolledCourses",auth, getEnrolledCourses)
+
+router.put("/updateProfile",auth, updateProfile)
+router.delete("/deleteProfile",auth, deleteAccount)
+router.get("/getAllUserDetails",auth, getAllUserDetails)
+router.put("/updateDisplayPicture",auth, updateDisplayPicture)
+router.get("/getEnrolledCourses",auth, getEnrolledCourses)
 
 module.exports = router

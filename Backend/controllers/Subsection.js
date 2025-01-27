@@ -10,9 +10,28 @@ exports.createSubSection = async (req,res) => {
         //data fetch from req body
         const {sectionId,title,description,timeDuration} = req.body
 
-        //extract file/video
-        const video = req.files.videoFile
 
+         // Check for video file
+         if (!req.files || !req.files.video) {
+            return res.status(400).json({
+                success: false,
+                message: "Video file is required",
+            });
+        }
+        //extract file/video
+        const video = req.files.video
+
+           // Validate video format
+           const supportedFormats = ["video/mp4", "video/mov"];
+           if (!supportedFormats.includes(video.mimetype)) {
+               return res.status(400).json({
+                   success: false,
+                   message: "Unsupported video format. Please upload an MP4 or MOV file.",
+               });
+           }
+   
+           // Log the video details
+           console.log("Video file details:", video);
         //data validation 
         if(!sectionId || !title || !description || !timeDuration ||!video){
             return res.status(400).json({
@@ -23,18 +42,18 @@ exports.createSubSection = async (req,res) => {
 
         //upload video to cloudinary
         const uploadDetails = await uploadImageToCloudinary(video,process.env.FOLDER_NAME)
-
+        console.log("upload Details ==>",uploadDetails)
         //create a sub section
         const subSectionDetails = await SubSection.create({
             title:title,
             description:description,
-            timeDuration:timeDuration,
-            video:uploadDetails.secure_url,
+            timeDuration:`${uploadDetails.duration}`,
+            videoUrl:uploadDetails.secure_url,
         })
 
         //update section with this Sub section objectId
         const updatedSection = await Section.findByIdAndUpdate(
-                                {id:sectionId},
+                                {_id:sectionId},
                                 {$push:{
                                     subSection:subSectionDetails._id
                                 }},
@@ -48,6 +67,7 @@ exports.createSubSection = async (req,res) => {
             data: updatedSection
         })
     } catch (error) {
+        console.log("Backend/controllers/Subsection.js======>",error)
         return res.status(500).json({
             sucess:false,
             message:"Internal server error",

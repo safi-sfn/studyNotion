@@ -35,7 +35,7 @@ exports.sendOTP = async (req,res) => {
             console.log("OTP is :-",otp)
 
             //check unique otp or not
-            const result = await OTP.findOne({otp:opt})
+            const result = await OTP.findOne({otp:otp})
             
             while(result){
                 otp = otpGenerator.generate(6,{
@@ -209,7 +209,7 @@ exports.login = async (req,res)=>{
         const payload = {
             email : user.email,
             id:user._id,
-            accounType:user.accountType
+            accountType:user.accountType
         }
         const token = jwt.sign(payload,process.env.JWT_SECRET,{
             expiresIn:"24h"
