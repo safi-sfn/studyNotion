@@ -2,6 +2,8 @@ import React from "react";
 import {FaArrowRight} from "react-icons/fa"
 import {Link} from "react-router-dom"
 import HighlightText from "../components/core/HomePage/HighlightText"
+import CTAButton from "../components/core/HomePage/Button"
+import Banner from "../assets/Images/banner.mp4"
 
 const Home = () =>{
     return(
@@ -28,6 +30,25 @@ const Home = () =>{
                 from anywhere in the world, and get access to a wealth of resources, 
                 including hands-on projects, quizzes, and personalized feedback from instructors. 
                 </div>
+                <div className="flex flex-row gap-7 mt-8">
+                    <CTAButton active={true} linkto={"/signup"}>
+                        Learn More
+                    </CTAButton>
+
+                    <CTAButton active={false} linkto={"/login"}>
+                        Book a Demo
+                    </CTAButton>
+                </div>
+                <div className="shadow-blue-200 my-16">
+                    <video
+                    muted
+                    autoPlay
+                    loop
+                    >
+                        <source src={Banner} type="video/mp4"/>
+                    </video>
+                </div>
+
                 </div>
 
      
