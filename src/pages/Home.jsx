@@ -171,6 +171,10 @@ const Home = () => {
       </div>
 
       {/*Section3 */}
+      <div className="w-11/12 mx-auto max-w-maxContent flex flex-col items-center 
+      justify-between gap-8 bg-richblack-900 text-white">
+
+      </div>
 
       {/*Section4 */}
     </div>
